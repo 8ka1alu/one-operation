@@ -360,6 +360,7 @@ async def on_message(message):
             if kaito_flag and message.author == playerclass[kaito_id]:
                 dm = await playerclass[kaito_id].create_dm()
                 await dm.send("怪盗の結果{}と役職を入れ替え、あなたは{}になりました。".format(playername[i], game.kaitou_change(kaito_id, i)))
+                kaito_flag = False
                 while True:
                     c = time.time()
                     if c - globt >= 20:
