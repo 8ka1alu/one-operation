@@ -486,10 +486,11 @@ async def on_message(message):
     ==========ここまでワンナイト人狼部分==========
     """
 
-    if message.content == "!特定のコマンド":
-        await message.channel.send("特定のメッセージ")
+    for c in command:
+        if message.content == c[i][0]:
+            await message.channel.send(c[i][1])
 
-    elif message.content == "!じゃあな":
+    if message.content == "!じゃあな":
         # ログアウト
         await message.channel.send("落ちます。お疲れ様でした。")
         await client.logout()
