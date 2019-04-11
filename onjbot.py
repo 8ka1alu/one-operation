@@ -32,9 +32,9 @@ globt = None
 
 # ==========お遊び用変数宣言==========
 command = []
-# command[i] = ["コマンド", "返すメッセージ"]
-command[0] = ["!ハッピーラッキー", "スマイルイエーイ！"]
-command[1] = ["!黒服合同", "https://twitter.com/i/moments/1108160244809531392"]
+# command.append(["コマンド", "返すメッセージ"])
+command.append(["!ハッピーラッキー", "スマイルイエーイ！"])
+command.append(["!黒服合同", "https://twitter.com/i/moments/1108160244809531392"])
 
 @client.event
 async def on_ready():
@@ -487,8 +487,8 @@ async def on_message(message):
     """
 
     for c in command:
-        if message.content == c[i][0]:
-            await message.channel.send(c[i][1])
+        if message.content == c[0]:
+            await message.channel.send(c[1])
 
     if message.content == "!じゃあな":
         # ログアウト
