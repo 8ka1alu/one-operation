@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-ワンナイト人狼GMbot ver1.1(beta)
+ワンナイト人狼GMbot ver1.0(beta)
 """
 
 import discord
@@ -22,9 +22,7 @@ uranai_id = 0
 kaito_id = 0
 jinro_id = []
 playername = []
-watchername = []
 playerclass = []
-watcherclass = []
 tohyo_flag = [] # すでに投票を行ったかどうか
 heiwa = 0 # 平和村投票
 heiwa_flag = [] # 平和村に投票したかどうか
@@ -56,7 +54,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global gameflag, ninzu, playername, watchername, playerclass, watcherclass, mainch, calleveryone, tohyo_flag, heiwa_flag, heiwa, mainch
+    global gameflag, ninzu, playername, playerclass, mainch, calleveryone, tohyo_flag, heiwa_flag, heiwa, mainch
     global uranai_id, kaito_id, jinro_id
     global uranai_flag, kaito_flag
     global game
@@ -70,73 +68,37 @@ async def on_message(message):
     """
 
     if message.content == "!人狼スタート":
-        await message.channel.send(":first_quarter_moon_with_face: ワンナイト人狼の試合を始めます。\n参加者の方は当チャンネルにて「!参加」と、ゲームを観戦する方は「!観戦」とお送りください。\n参加メッセージを送り終え、準備が整いましたら「!開始」とお送りください。ゲームが開始されます。")
+        await message.channel.send(":first_quarter_moon_with_face: ワンナイト人狼の試合を始めます。参加者の方は当チャンネルにて「!参加」とお送りください。")
+        await message.channel.send("参加メッセージを送り終え、準備が整いましたら「!開始」とお送りください。ゲームが開始されます。")
         gameflag = 1
         ninzu = 0
         playername = []
-        watchername = []
         playerclass = []
-        watcherclass = []
         tohyo_flag = []
         mainch = client.get_channel(channelid)
     
     elif message.content == "!参加":
         ment = message.author.mention
         if gameflag == 1:
-            if watchername.count(ment) == 1:
-                await mainch.send("{} 観戦を取り消し、参加を承りました。".format(ment))
-                watchername.remove(ment)
-                watcherclass.remove(message.author)
+            if playername.count(ment) == 0:
+                await mainch.send("{} 参加承りました。".format(ment))
                 ninzu += 1
                 playername.append(ment)
                 playerclass.append(message.author)
                 tohyo_flag.append([0, 0])
                 heiwa_flag.append(0)
-            else:
-                if playername.count(ment) == 0:
-                    await mainch.send("{} 参加承りました。".format(ment))
-                    ninzu += 1
-                    playername.append(ment)
-                    playerclass.append(message.author)
-                    tohyo_flag.append([0, 0])
-                    heiwa_flag.append(0)
-                elif playername.count(ment) == 1:
-                    await mainch.send("{} 参加を取り消しました。".format(ment))
-                    ninzu -= 1
-                    playername.remove(ment)
-                    playerclass.remove(message.author)
-                    tohyo_flag.remove([0, 0])
-                    heiwa_flag.remove(0)
-        elif gameflag == 0:
-            await message.channel.send("❕ゲームが待機状態になっていないようです。")
-        else:
-            await message.channel.send("❕ゲーム進行中です。現在のゲームが終了するまでお待ち下さい。")
-
-    elif message.content == "!観戦":
-        ment = message.author.mention
-        if gameflag == 1:
-            if playername.count(ment) == 1:
-                await mainch.send("{} 参加を取り消し、観戦を承りました。".format(ment))
+            elif playername.count(ment) == 1:
+                await mainch.send("{} 参加を取り消しました。".format(ment))
                 ninzu -= 1
                 playername.remove(ment)
                 playerclass.remove(message.author)
                 tohyo_flag.remove([0, 0])
                 heiwa_flag.remove(0)
-                watchername.append(ment)
-                watcherclass.append(message.author)
-            else:
-                if watchername.count(ment) == 0:
-                    await mainch.send("{} 観戦承りました。".format(ment))
-                    watchername.append(ment)
-                    watcherclass.append(message.author)
-                elif playername.count(ment) == 1:
-                    await mainch.send("{} 観戦を取り消しました。".format(ment))
-                    watchername.remove(ment)
-                    watcherclass.remove(message.author)
         elif gameflag == 0:
             await message.channel.send("❕ゲームが待機状態になっていないようです。")
         else:
             await message.channel.send("❕ゲーム進行中です。現在のゲームが終了するまでお待ち下さい。")
+
 
     elif message.content == "!開始":
 
@@ -180,14 +142,6 @@ async def on_message(message):
                     await dm.send("{} あなたの役職は".format(playername[i]) + game.yakushoku_winlose(i) + "です。")
 
                 await mainch.send("ダイレクトメッセージにて役職を通知しました。10秒後に夜になります。")
-
-                kekka = ""
-                for i in range(ninzu):
-                    kekka += "{} : ".format(playername[i]) + game.yakushoku_winlose(i)
-                    kekka += "\n"
-                for i in range(len(watcherclass)):
-                    dm = await watcherclass[i].create_dm()
-                    await dm.send(kekka)
 
                 sleep(10)
                 # ==========占い師のターン==========
@@ -535,7 +489,7 @@ async def on_message(message):
         await message.channel.send("{} 現在の人数は{}人です".format(message.author.mention, ninzu))
 
     elif message.content == "!遊び方":
-        await message.channel.send("https://github.com/tsubasa283paris/OneNightJinroBot/blob/master/README.md")
+        await message.channel.send("https://github.com/tsubasa283paris/OneNightJinroBot/blob/master/README_11b.md")
 
     if message.content == "!人狼終了":
         await mainch.send(":first_quarter_moon_with_face: ワンナイト人狼を終了します。")
