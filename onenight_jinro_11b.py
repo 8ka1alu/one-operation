@@ -95,7 +95,7 @@ class OneNightJinro:
         elif yaku == 3:
             return "人狼"
         elif yaku >= 4:
-            return "狂人"
+            return "人間"
 
     def shirokuro_winlose(self, id): # IDもらって0人間か1人狼か返す用
         if players[id][0] <= 2:
