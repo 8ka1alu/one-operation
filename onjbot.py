@@ -482,6 +482,9 @@ async def on_message(message):
         await message.channel.send("{} 現在の人数は{}人です".format(message.author.mention, ninzu))
         print(playername)
 
+    elif message.content == "!遊び方":
+        await message.channel.send("https://github.com/tsubasa283paris/OneNightJinroBot/blob/master/README.md")
+
     """
     ==========ここまでワンナイト人狼部分==========
     """
