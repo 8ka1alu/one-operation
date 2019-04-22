@@ -1,15 +1,16 @@
 """
 工事現場
 """
-from manager.PlayerManager import PlayerManager
+from PlayerManager import PlayerManager
 
 class GameManager():
     def __init__(self):
-        player = PlayerManager()
+        self.player = PlayerManager()
         self.phase = "standby"
 
-    def phase(self):
-        return self.phase
+    def reset(self):
+        self.phase = "standby"
+        self.player.reset()
 
     def commands(self, author, com, id):
         if com == "!参加":
@@ -35,4 +36,10 @@ class GameManager():
         self.chat = self.player.add(author)
 
     def watch(self, author):
-        self.player.watch
+        self.chatflag = "mainch"
+        self.chat = self.player.watch(author)
+
+    def gamestart(self):
+        self.chatflag = "mainch"
+        self.chat = self.player.get_all_mention() + "\n:wolf: {}人でのワンナイト人狼ゲームを開始します。\nゲーム参加者へDMにて役職を通知しました。10秒後に夜になります。".format(len(self.player.players[0]))
+        self.phase = "night"
