@@ -15,7 +15,7 @@ class OneNightJinro:
         """
         players配列について
         プレイヤー人数 * (役職, 投票数)　の二次元配列。
-        役職は 0 = 村人、1 = 占い師、2 = 怪盗、3 = 人狼
+        役職は 0 = 村人、1 = 占い師、2 = 怪盗、3 = 人狼, 4 = 狂人
         """
 
         if playernum < 4:
@@ -39,12 +39,22 @@ class OneNightJinro:
             players[0][0] = 0
             players[1][0] = 0
             players[2][0] = 0
+            players[3][0] = 1
+            players[4][0] = 2
+            players[5][0] = 3
+            players[6][0] = 3
+            players[7][0] = 4
+        if playernum == 7:
+            players[0][0] = 0
+            players[1][0] = 0
+            players[2][0] = 0
             players[3][0] = 0
             players[4][0] = 1
             players[5][0] = 2
             players[6][0] = 3
             players[7][0] = 3
-        if playernum > 6:
+            players[8][0] = 4
+        if playernum > 7:
             exc = 1
 
         random.shuffle(players)
@@ -64,6 +74,8 @@ class OneNightJinro:
             return "怪盗"
         if yaku == 3:
             return "人狼"
+        if yaku == 4:
+            return "狂人"
 
     def yakushoku_winlose(self, id): # IDもらって役職名を返すだけ用
         if players[id][0] == 0:
@@ -74,18 +86,24 @@ class OneNightJinro:
             return "怪盗"
         if players[id][0] == 3:
             return "人狼"
+        if players[id][0] == 4:
+            return "狂人"
 
     def shirokuro(self, yaku): # 数字もらって0人間か1人狼かを返すだけ用
         if yaku <= 2:
             return "人間"
-        else:
+        elif yaku == 3:
             return "人狼"
+        elif yaku >= 4:
+            return "人間"
 
     def shirokuro_winlose(self, id): # IDもらって0人間か1人狼か返す用
         if players[id][0] <= 2:
             return 0
-        else:
+        elif players[id][0] == 3:
             return 1
+        elif players[id][0] >= 4:
+            return 0
         
     def uranai_check(self, id): # 占い師。idはターゲット
         if id == -1: # -1は山札参照
