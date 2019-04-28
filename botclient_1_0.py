@@ -110,6 +110,8 @@ async def process_game():
         await mainch.send("討論時間は残り{}分です。".format(discuss_time - i))
     await asyncio.sleep(60)
     await mainch.send(":alarm_clock: 討論時間が終了しました。")
+    chat = game.votemessage() # 投票アクションのコマンドを通知
+    await mainch.send(chat)
 
 async def gameset():
     await asyncio.sleep(5)

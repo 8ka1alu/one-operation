@@ -245,6 +245,13 @@ class GameManager():
                     self.player.players[2][int(id1)] = id2
                     self.chat = "{}に投票しました。".format(self.player.players[0][i].mention)
                     return
+    
+    def votemessage(self):
+        retchat = "以下のコマンドをコピーして投票を行ってください。\n"
+        for i in range(self.player.playernum()):
+            retchat += "「!投票 {}」: {}\n".format(i, self.player.players[0][i].mention)
+        retchat += "「!投票 p」: 平和村"
+        return retchat
 
     def getresult(self):
         humanlist, wolflist = [], []
