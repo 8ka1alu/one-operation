@@ -2,7 +2,7 @@
 ワンナイト人狼GMbot ver1.0
 """
 import discord
-from management.GameManager import GameManager
+from management.gamemanager import GameManager
 import asyncio
 client = discord.Client()
 game = GameManager()
@@ -12,14 +12,19 @@ game = GameManager()
 with open("ids.txt", "r") as f:
     string = f.read()
 accesstoken = string.split()[0]
-mainch = client.get_channel(int(string.split()[1]))
+channelid = int(string.split()[1])
 
-# 自由に追加できるコマンドです。「command.append(["コマンド", "返すメッセージ"])」で追加してください。
-command = []
-command.append(["!ハッピーラッキー", "スマイルイエーイ！"])
-command.append(["!黒服合同", "https://twitter.com/i/moments/1108160244809531392"])
-command.append(["!公式", "twittttther　https://twitter.com/bang_dream_gbp \n ホームページ https://bang-dream.bushimo.jp/"])
-command.append(["!遊び方", "https://github.com/tsubasa283paris/OneNightJinroBot/blob/master/README_1_0.md"])
+def addcommand(arg1, arg2):
+    global command
+    command[0].append(arg1)
+    command[1].append(arg2)
+
+# 自由に追加できるコマンドです。「addcommand("コマンド", "返すメッセージ")」で追加してください。
+command = [[], []]
+addcommand("!ハッピーラッキー", "スマイルイエーイ！")
+addcommand("!黒服合同", "https://twitter.com/i/moments/1108160244809531392")
+addcommand("!公式", "twittttther　https://twitter.com/bang_dream_gbp \n ホームページ https://bang-dream.bushimo.jp/")
+addcommand("!遊び方", "https://github.com/tsubasa283paris/OneNightJinroBot/blob/master/README_1_0.md")
 
 # ゲームフェーズごとに使えるコマンド一覧です。
 commands_per_phase = {
@@ -34,6 +39,7 @@ discuss_time = 5
 
 @client.event
 async def on_ready():
+    global mainch
     # Bot起動時の処理
     print('ログインしました')
     print(client.user.name)
@@ -41,6 +47,7 @@ async def on_ready():
     print(discord.__version__)
     print('------')
 
+    mainch = client.get_channel(channelid)
     await mainch.send("YAPPY! HELLO、HAPPY WORLD！")
 
 
@@ -53,8 +60,17 @@ async def on_message(message):
     if aut.bot:  # ボットのメッセージをハネる
        return
 
-    if mes[0] in commands_per_phase[game.phase]:
-        chat = game.commands(aut, mes[0], mes[1], mes[2])
+    if mes[0] in command[0]:
+        for i in range(len(command[0])):
+            if mes[0] == command[0][i]:
+                await mainch.send(command[1][i])
+    elif mes[0] in commands_per_phase[game.phase]:
+        if len(mes) == 1:
+            chat = game.commands(aut, mes[0], None, None)
+        elif len(mes) == 2:
+            chat = game.commands(aut, mes[0], mes[1], None)
+        elif len(mes) == 3:
+            chat = game.commands(aut, mes[0], mes[1], mes[2])
         if chat[0] == "mainch":
             await mainch.send(chat[1])
         elif chat[0] == "dm":
@@ -75,10 +91,6 @@ async def on_message(message):
             await gameset()
     else:
         message.channel.send(":tired_face: 無効なコマンドです。")
-            
-    for c in command:
-        if mes[0] == c[0]:
-            await message.channel.send(c[1])
 
     if mes[0] == "!じゃあな":
         # ログアウト
@@ -112,6 +124,7 @@ async def process_game():
     await mainch.send(":alarm_clock: 討論時間が終了しました。")
     chat = game.votemessage() # 投票アクションのコマンドを通知
     await mainch.send(chat)
+
 
 async def gameset():
     await asyncio.sleep(5)

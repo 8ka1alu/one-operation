@@ -1,6 +1,6 @@
 import discord
 import random
-from JobManager import JobManager
+from management.JobManager import JobManager
 
 class PlayerManager():
     def __init__(self):
