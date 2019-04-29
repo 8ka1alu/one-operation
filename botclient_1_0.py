@@ -23,7 +23,7 @@ command.append(["!遊び方", "https://github.com/tsubasa283paris/OneNightJinroB
 
 # ゲームフェーズごとに使えるコマンド一覧です。
 commands_per_phase = {
-    "standby" : ["!参加", "!観戦", "!ゲーム開始"],
+    "standby" : ["!参加", "!観戦", "!人数", "!ゲーム開始"],
     "night" : ["!占い", "!怪盗"],
     "day" : ["!投票", "!結果", "!GM投票"]
 }
@@ -60,7 +60,7 @@ async def on_message(message):
         elif chat[0] == "dm":
             dm = aut.create_dm()
             await dm.send(chat[1])
-        if mes[0] == commands_per_phase["standby"][2]:
+        if mes[0] == commands_per_phase["standby"][3]:
             if len(mes) == 1:
                 await process_game()
             elif len(mes) > 1:

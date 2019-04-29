@@ -101,6 +101,8 @@ class GameManager():
             self.join(author)
         elif com == "!観戦":
             self.watch(author)
+        elif com == "!人数":
+            self.confirm_num()
         elif com == "!ゲーム開始":
             self.gamestart()
         elif com == "!占い":
@@ -122,6 +124,11 @@ class GameManager():
     def watch(self, author):
         self.chatflag = "mainch"
         self.chat = self.player.watch(author)
+
+    def confirm_num(self):
+        self.chatflag = "mainch"
+        num = self.player.playernum()
+        self.chat = "現在の参加人数は{}人です。".format(num)
 
     def gamestart(self):
         self.chatflag = "mainch"
