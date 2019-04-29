@@ -2,7 +2,7 @@
 ワンナイト人狼GMbot ver1.0
 """
 import discord
-from management.gamemanager import GameManager
+from management.GameManager import GameManager
 import asyncio
 client = discord.Client()
 game = GameManager()
