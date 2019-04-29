@@ -13,7 +13,7 @@ class JobManager():
         self.jobs.append(Job("怪盗", False, False)) # 2
         self.jobs.append(Job("人狼", True, True)) # 3
         self.jobs.append(Job("共有者", False, False)) # 4
-        self.jobs.append(Job("狂人", False, True)) # 5
+        self.jobs.append(Job("メンタリスト", False, True)) # 5
 
         # デフォルトのカード構成を変更する場合ここを書き換えてください。
         self.cards = {

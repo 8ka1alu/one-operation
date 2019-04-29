@@ -28,9 +28,9 @@ addcommand("!遊び方", "https://github.com/tsubasa283paris/OneNightJinroBot/bl
 
 # ゲームフェーズごとに使えるコマンド一覧です。
 commands_per_phase = {
-    "standby" : ["!参加", "!観戦", "!人数", "!ゲーム開始"],
+    "standby" : ["!参加", "!観戦", "!参加者", "!開始", "!参加者リセット"],
     "night" : ["!占い", "!怪盗"],
-    "day" : ["!投票", "!結果", "!GM投票"]
+    "day" : ["!投票", "!GM投票"]
 }
 
 # デフォルトの討論タイマーの時間(分)
@@ -60,7 +60,11 @@ async def on_message(message):
     if aut.bot:  # ボットのメッセージをハネる
        return
 
-    if mes[0] in command[0]:
+    if mes[0] == "!じゃあな":
+        # ログアウト
+        await message.channel.send("落ちます。お疲れ様でした。")
+        await client.logout()
+    elif mes[0] in command[0]:
         for i in range(len(command[0])):
             if mes[0] == command[0][i]:
                 await mainch.send(command[1][i])
@@ -74,9 +78,9 @@ async def on_message(message):
         if chat[0] == "mainch":
             await mainch.send(chat[1])
         elif chat[0] == "dm":
-            dm = aut.create_dm()
+            dm = await aut.create_dm()
             await dm.send(chat[1])
-        if mes[0] == commands_per_phase["standby"][3]:
+        if mes[0] == commands_per_phase["standby"][3] and game.startable:
             if len(mes) == 1:
                 await process_game()
             elif len(mes) > 1:
@@ -87,15 +91,9 @@ async def on_message(message):
                     await mainch.send(":tired_face: 無効なコマンドです。タイマーの設定がおかしいようです。")
         elif mes[0] == commands_per_phase["day"][0]:
             await mainch.send("{}さんが投票を完了しました。".format(aut.mention))
+            await votecheck()
         elif mes[0] == commands_per_phase["day"][1]:
-            await gameset()
-    else:
-        await message.channel.send(":tired_face: 無効なコマンドです。")
-
-    if mes[0] == "!じゃあな":
-        # ログアウト
-        await message.channel.send("落ちます。お疲れ様でした。")
-        await client.logout()
+            await votecheck()
 
 
 async def process_game():
@@ -103,17 +101,23 @@ async def process_game():
     for i in range(game.player.playernum()):
         dm = await chat[0][i].create_dm()
         await dm.send(chat[1][i])
+    chat = game.watchmessage() # 観戦者にプレイヤーの役職を通知する
+    for i in range(len(chat[0])):
+        dm = await chat[0][i].create_dm()
+        await dm.send(chat[1])
     await asyncio.sleep(10)
     await mainch.send(":first_quarter_moon_with_face: 夜になります。")
     chat = game.jobmessage() # ターンの存在する役職ごとにDMを送信する
     for i in range(len(chat[0])):
         dm = await chat[0][i].create_dm()
         await dm.send(chat[1][i])
-    await mainch.send("役職持ちのプレイヤーへDMを送りました。30秒後に朝になります。")
-    await asyncio.sleep(30)
+    await mainch.send("役職持ちのプレイヤーへDMを送りました。60秒後に朝になります。")
+    await asyncio.sleep(60)
+    game.thiefact()
     game.phase = "day"
-    await mainch.send(":sun_with_face: 朝になりました！討論を開始してください。\n:alarm_clock: 討論時間は残り{}分です。".format(discuss_time))
-    chat = game.watchmessage() # 観戦者に役職と怪盗の結果を通知する
+    cards = game.getcardslist()
+    await mainch.send(":sun_with_face: 朝になりました！討論を開始してください。\n" + cards + "\n:alarm_clock: 討論時間は残り{}分です。".format(discuss_time))
+    chat = game.watchmessage_thief() # 観戦者に怪盗の行動を通知する
     for i in range(len(chat[0])):
         dm = await chat[0][i].create_dm()
         await dm.send(chat[1])
@@ -126,7 +130,14 @@ async def process_game():
     await mainch.send(chat)
 
 
+async def votecheck():
+    if game.vote_is_complete():
+        await gameset()
+
+
 async def gameset():
+    game.result()
+    await mainch.send(game.chat)
     await asyncio.sleep(5)
     mes = game.getresult()
     await mainch.send(mes)
