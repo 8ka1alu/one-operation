@@ -90,7 +90,7 @@ async def on_message(message):
         elif mes[0] == commands_per_phase["day"][1]:
             await gameset()
     else:
-        message.channel.send(":tired_face: 無効なコマンドです。")
+        await message.channel.send(":tired_face: 無効なコマンドです。")
 
     if mes[0] == "!じゃあな":
         # ログアウト
