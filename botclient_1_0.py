@@ -19,7 +19,7 @@ command = []
 command.append(["!ハッピーラッキー", "スマイルイエーイ！"])
 command.append(["!黒服合同", "https://twitter.com/i/moments/1108160244809531392"])
 command.append(["!公式", "twittttther　https://twitter.com/bang_dream_gbp \n ホームページ https://bang-dream.bushimo.jp/"])
-command.append(["!遊び方", "https://github.com/tsubasa283paris/OneNightJinroBot/blob/master/README.md"])
+command.append(["!遊び方", "https://github.com/tsubasa283paris/OneNightJinroBot/blob/master/README_1_0.md"])
 
 # ゲームフェーズごとに使えるコマンド一覧です。
 commands_per_phase = {
