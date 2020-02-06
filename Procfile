@@ -1,1 +1,1 @@
-discordbot: python onjbot.py
+discordbot: python onenight_jinro.py
