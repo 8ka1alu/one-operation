@@ -4,6 +4,7 @@
 import discord
 from management.GameManager import GameManager
 import asyncio
+import os
 client = discord.Client()
 game = GameManager()
 
