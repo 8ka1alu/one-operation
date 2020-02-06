@@ -10,11 +10,8 @@ import time
 from time import sleep
 import os
 
-f = open("ids.txt", "r")
-string = f.read()
-accesstoken = string.split()[0]
-channelid = int(string.split()[1])
-f.close()
+accesstoken = os.environ['DISCORD_BOT_TOKEN']
+channelid = 674966854183157791
 
 # ==========ワンナイト人狼用変数宣言==========
 client = discord.Client()
