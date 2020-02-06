@@ -8,6 +8,7 @@ import random
 import onenight_jinro_1_1b as onj
 import time
 from time import sleep
+import os
 
 f = open("ids.txt", "r")
 string = f.read()
