@@ -1,1 +1,1 @@
-discordbot: python onenight_jinro_1_1b.py
+discordbot: python botclient_1_1b.py
