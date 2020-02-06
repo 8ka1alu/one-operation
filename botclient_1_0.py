@@ -8,12 +8,8 @@ import os
 client = discord.Client()
 game = GameManager()
 
-
-# ids.txtからBotのアクセストークンとメインのテキストチャンネルIDを取得します
-with open("ids.txt", "r") as f:
-    string = f.read()
-accesstoken = string.split()[0]
-channelid = int(string.split()[1])
+accesstoken = os.environ['DISCORD_BOT_TOKEN']
+channelid = 674966854183157791
 
 def addcommand(arg1, arg2):
     global command
