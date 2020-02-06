@@ -93,6 +93,10 @@ async def on_message(message):
                 playerclass.append(message.author)
                 tohyo_flag.append([0, 0])
                 heiwa_flag.append(0)
+                role1 = discord.utils.get(message.guild.roles, name='観戦者')
+                await message.author.remove_roles(role1)
+                role0 = discord.utils.get(message.guild.roles, name='参加者')
+                await message.author.add_roles(role0)
             else:
                 if playername.count(ment) == 0:
                     await mainch.send("{} 参加承りました。".format(ment))
@@ -101,6 +105,8 @@ async def on_message(message):
                     playerclass.append(message.author)
                     tohyo_flag.append([0, 0])
                     heiwa_flag.append(0)
+                    role0 = discord.utils.get(message.guild.roles, name='参加者')
+                    await message.author.add_roles(role0)
                 elif playername.count(ment) == 1:
                     await mainch.send("{} 参加を取り消しました。".format(ment))
                     ninzu -= 1
@@ -108,6 +114,9 @@ async def on_message(message):
                     playerclass.remove(message.author)
                     tohyo_flag.remove([0, 0])
                     heiwa_flag.remove(0)
+                    role1 = discord.utils.get(message.guild.roles, name='参加者')
+                    await message.author.remove_roles(role1)
+                
         elif gameflag == 0:
             await message.channel.send("❕ゲームが待機状態になっていないようです。")
         else:
@@ -125,15 +134,24 @@ async def on_message(message):
                 heiwa_flag.remove(0)
                 watchername.append(ment)
                 watcherclass.append(message.author)
+                role1 = discord.utils.get(message.guild.roles, name='参加者')
+                await message.author.remove_roles(role1)
+                role0 = discord.utils.get(message.guild.roles, name='観戦者')
+                await message.author.add_roles(role0)
             else:
                 if watchername.count(ment) == 0:
                     await mainch.send("{} 観戦承りました。".format(ment))
                     watchername.append(ment)
                     watcherclass.append(message.author)
+                    role0 = discord.utils.get(message.guild.roles, name='観戦者')
+                    await message.author.add_roles(role0)
                 elif playername.count(ment) == 1:
                     await mainch.send("{} 観戦を取り消しました。".format(ment))
                     watchername.remove(ment)
                     watcherclass.remove(message.author)
+                    role1 = discord.utils.get(message.guild.roles, name='観戦者')
+                    await message.author.remove_roles(role1)
+                    
         elif gameflag == 0:
             await message.channel.send("❕ゲームが待機状態になっていないようです。")
         else:
