@@ -576,9 +576,9 @@ async def on_message(message):
     if message.content == "!じゃあな":
         # ログアウト
         role1 = discord.utils.get(message.guild.roles, name='観戦者')
-        await message.author.remove_roles(role1)
+        await member.remove_roles(role1)
         role0 = discord.utils.get(message.guild.roles, name='参加者')
-        await message.author.remove_roles(role0)
+        await member.remove_roles(role0)
         await message.channel.send("落ちます。お疲れ様でした。")
         await client.logout()
 
