@@ -11,7 +11,7 @@ from time import sleep
 import os
 
 accesstoken = os.environ['DISCORD_BOT_TOKEN']
-channelid = 674966854183157791
+channelid = 676738177062535168
 
 # ==========ワンナイト人狼用変数宣言==========
 client = discord.Client()
