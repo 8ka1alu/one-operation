@@ -53,7 +53,7 @@ async def on_ready():
 
     mainch = client.get_channel(channelid)
     await mainch.send("YAPPY! HELLO、HAPPY WORLD！")
-    await client.change_presence(status=discord.Status.idle,activity=discord.Game(name='ワンナイト人狼'))
+    await client.change_presence(status=discord.Status.idle,activity=discord.Game(name='創成の女神'))
 
 @client.event
 async def on_message(message):
